@@ -43,9 +43,11 @@ void loop() {
   } else if (distance < _DIST_MIN) {
       distance = _DIST_MIN - 10.0;    // Set Lower Value
       digitalWrite(PIN_LED, 1);       // LED OFF
-  } else {    // In desired Range
-      digitalWrite(PIN_LED, 0);       // LED ON      
-  }
+  } else if (distance <= 200) {    // In desired Range
+      analogWrite(PIN_LED, 255*(200-distance)/100);
+  } else if (distance >= 200) {
+      analogWrite(PIN_LED, 255*(distance-200)/100);
+  }  
 
   // output the distance to the serial port
   Serial.print("Min:");        Serial.print(_DIST_MIN);
@@ -54,7 +56,7 @@ void loop() {
   Serial.println("");
   
   // do something here
-  delay(50); // Assume that it takes 50ms to do something.
+  delay(0); // Assume that it takes 50ms to do something.
   
   // update last sampling time
   last_sampling_time += INTERVAL;
